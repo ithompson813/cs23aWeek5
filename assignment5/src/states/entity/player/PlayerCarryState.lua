@@ -72,9 +72,6 @@ function PlayerCarryState:update(dt)
     -- instead of swing the sword, pressing space will throw the object
     if love.keyboard.wasPressed('space') then
 
-        -- set object back to solid and designate it as a projectile
-        self.carriedObject.solid = true
-
         -- triggering the projectile flag will cause the projectile behavior to execute
         -- projectile behavior can be found in the GameObject file
         self.carriedObject.projectile = true

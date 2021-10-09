@@ -21,15 +21,20 @@ function PlayerWalkState:update(dt)
     if love.keyboard.isDown('left') then
         self.entity.direction = 'left'
         self.entity:changeAnimation('walk-left')
+        -- if the player moves, reset possible item to pickup
+        self.dungeon.currentRoom.tempCarry = nil
     elseif love.keyboard.isDown('right') then
         self.entity.direction = 'right'
         self.entity:changeAnimation('walk-right')
+        self.dungeon.currentRoom.tempCarry = nil
     elseif love.keyboard.isDown('up') then
         self.entity.direction = 'up'
         self.entity:changeAnimation('walk-up')
+        self.dungeon.currentRoom.tempCarry = nil
     elseif love.keyboard.isDown('down') then
         self.entity.direction = 'down'
         self.entity:changeAnimation('walk-down')
+        self.dungeon.currentRoom.tempCarry = nil
     else
         self.entity:changeState('idle')
     end

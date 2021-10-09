@@ -40,6 +40,8 @@ function Room:init(player)
     -- used for drawing when this room is the next room, adjacent to the active
     self.adjacentOffsetX = 0
     self.adjacentOffsetY = 0
+
+    self.tempCarry = nil
 end
 
 --[[
@@ -127,12 +129,9 @@ function Room:generateObjects()
             end
         end
 
-        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-            pot.solid = false
-            self.player:changeState('carry', {
-                carriedObject = pot
-            })
-        end
+        -- on collision assign pot as the object to be carried if player initiates pickup
+        -- this is reset to nil if the player moves away from the pot
+        self.tempCarry = pot
 
     end
 
@@ -183,9 +182,25 @@ function Room:generateWallsAndFloors()
 end
 
 function Room:update(dt)
-    
+
     -- don't update anything if we are sliding to another room (we have offsets)
     if self.adjacentOffsetX ~= 0 or self.adjacentOffsetY ~= 0 then return end
+
+    -- pick up object
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+        
+        -- if an object is ready to be picked up
+        if self.tempCarry then
+
+            -- switch to carry state with that object
+            self.player:changeState('carry', {
+                carriedObject = self.tempCarry
+            })
+
+            -- reset tracked object to be carried
+            self.tempCarry = nil
+        end
+    end
 
     self.player:update(dt)
 
